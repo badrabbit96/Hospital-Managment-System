@@ -1,0 +1,1037 @@
+--------------------------------------------------------
+--  File created - wtorek-maja-09-2017   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Type MIGR_FILTER
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."MIGR_FILTER" IS OBJECT (
+  FILTER_TYPE INTEGER, -- Filter Types are 0-> ALL, 1->NAMELIST, 2->WHERE CLAUSE, 3->OBJECTID LIST
+  OBJTYPE VARCHAR2(40),
+  OBJECTIDS OBJECTIDLIST,
+  NAMES NAMELIST,
+  WHERECLAUSE VARCHAR2(1000));
+
+/
+--------------------------------------------------------
+--  DDL for Type MIGR_FILTER_SET
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."MIGR_FILTER_SET" IS TABLE OF MIGR_FILTER;
+
+/
+--------------------------------------------------------
+--  DDL for Type MIGR_REPORT_DETAIL_ROW
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."MIGR_REPORT_DETAIL_ROW" AS OBJECT
+ (CAPTURED_ID            NUMBER(38),
+  CAPTURED_NAME          VARCHAR2(4000),
+  CONVERTED_NAME          VARCHAR2(4000),
+  CAPTURED_TYPE          VARCHAR2(4000),
+  CONVERTED_TYPE          VARCHAR2(4000),
+  CAPTURE_STATUS         VARCHAR2(20),
+  CONVERT_STATUS         VARCHAR2(20),
+  GENERATE_STATUS        VARCHAR2(20),
+  LOGTEXT               VARCHAR2(4000)
+ );
+
+/
+--------------------------------------------------------
+--  DDL for Type MIGR_REPORT_DETAIL_TABLE
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."MIGR_REPORT_DETAIL_TABLE" AS TABLE OF MIGR_REPORT_DETAIL_ROW;
+
+/
+--------------------------------------------------------
+--  DDL for Type MIGR_REPORT_SUM_ROW
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."MIGR_REPORT_SUM_ROW" AS OBJECT
+       (LABEL           VARCHAR2(50),
+	    SCHEMA_SUM      NUMBER,
+        TABLE_SUM       NUMBER,
+		INDEX_SUM       NUMBER,
+		CONSTRAINT_SUM  NUMBER,
+		VIEW_SUM        NUMBER,
+		TRIGGER_SUM     NUMBER,
+		SP_SUM          NUMBER		
+        );
+
+/
+--------------------------------------------------------
+--  DDL for Type MIGR_REPORT_SUM_TABLE
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."MIGR_REPORT_SUM_TABLE" AS TABLE OF MIGR_REPORT_SUM_ROW;
+
+/
+--------------------------------------------------------
+--  DDL for Type NAME_AND_COUNT_ARRAY
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."NAME_AND_COUNT_ARRAY" IS VARRAY(30) OF name_and_count_t;
+
+/
+--------------------------------------------------------
+--  DDL for Type NAME_AND_COUNT_T
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."NAME_AND_COUNT_T" IS OBJECT (
+  OBJECT_NAME varchar2(30),
+  UPDATE_COUNT INTEGER);
+
+/
+--------------------------------------------------------
+--  DDL for Type NAMELIST
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."NAMELIST" IS TABLE OF VARCHAR2(40);
+
+/
+--------------------------------------------------------
+--  DDL for Type OBJECTIDLIST
+--------------------------------------------------------
+
+  CREATE OR REPLACE TYPE "SZPITAL_DB"."OBJECTIDLIST" IS TABLE OF INTEGER;
+
+/
+--------------------------------------------------------
+--  DDL for Table CHOROBA
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."CHOROBA" 
+   (	"CHOROBAID" NUMBER, 
+	"CHOROBANAZWA" VARCHAR2(200 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table LEKARZ
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."LEKARZ" 
+   (	"LEKARZID" NUMBER, 
+	"LEKARZIMIE" VARCHAR2(200 BYTE), 
+	"LEKARZNAZWISKO" VARCHAR2(200 BYTE), 
+	"ADRES" VARCHAR2(200 BYTE), 
+	"PESEL" NUMBER, 
+	"NUMERTEL" NUMBER, 
+	"KWALIFIKACJE" VARCHAR2(200 BYTE), 
+	"SPECIALIZACJA" VARCHAR2(200 BYTE), 
+	"PLEC" VARCHAR2(20 BYTE), 
+	"GK" VARCHAR2(20 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table LOGOWANIE
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."LOGOWANIE" 
+   (	"LOGIN" VARCHAR2(100 BYTE), 
+	"HASLO" VARCHAR2(50 BYTE), 
+	"IMIE" VARCHAR2(250 BYTE), 
+	"STATUS" VARCHAR2(15 BYTE), 
+	"EMAIL" VARCHAR2(250 BYTE), 
+	"TERAZLOGOWANIE" VARCHAR2(50 BYTE) DEFAULT NULL, 
+	"OSTATNIELOGOWANIE" VARCHAR2(50 BYTE) DEFAULT NULL
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table ODDZIAL
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."ODDZIAL" 
+   (	"NAZWAODDZIALU" VARCHAR2(100 BYTE), 
+	"RODZAJODDZIALU" VARCHAR2(50 BYTE), 
+	"LICZBALOZEK" NUMBER(*,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table PACJENT
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."PACJENT" 
+   (	"PACJENTID" NUMBER DEFAULT NULL, 
+	"PACJENTIMIE" VARCHAR2(20 BYTE), 
+	"PACJENTNAZWISKO" VARCHAR2(20 BYTE), 
+	"ADRES" VARCHAR2(20 BYTE), 
+	"PESEL" NUMBER, 
+	"NUMERTEL" NUMBER, 
+	"WIEK" NUMBER, 
+	"PLEC" VARCHAR2(20 BYTE), 
+	"GK" VARCHAR2(20 BYTE), 
+	"UWAGI" VARCHAR2(20 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table PACJENT_CHOROBA
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."PACJENT_CHOROBA" 
+   (	"PACJENTID" NUMBER, 
+	"CHOROBAID" NUMBER
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table PRZYJECIE_NA_ODDZIAL
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" 
+   (	"PRZYJECIEID" NUMBER, 
+	"PACJENTID" NUMBER, 
+	"ROZPOZNANIE" VARCHAR2(200 BYTE), 
+	"NAZWAODDZIALU" VARCHAR2(200 BYTE), 
+	"DATAPRZ" VARCHAR2(20 BYTE), 
+	"LEKARZID" NUMBER, 
+	"UWAGI" VARCHAR2(200 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table WYPIS_Z_ODDZIALU
+--------------------------------------------------------
+
+  CREATE TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" 
+   (	"WYPISID" NUMBER, 
+	"PRZYJECIEID" NUMBER, 
+	"DATAWYP" VARCHAR2(20 BYTE), 
+	"UWAGI" VARCHAR2(20 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Sequence CHOROBA_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "SZPITAL_DB"."CHOROBA_SEQ"  MINVALUE 1 MAXVALUE 9999 INCREMENT BY 1 START WITH 61 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Sequence LEKARZ_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "SZPITAL_DB"."LEKARZ_SEQ"  MINVALUE 1 MAXVALUE 9999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Sequence PACJENT_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "SZPITAL_DB"."PACJENT_SEQ"  MINVALUE 1 MAXVALUE 9999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Sequence PRZYJECIE_NA_ODDZIAL_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL_SEQ"  MINVALUE 1 MAXVALUE 9999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Sequence WYPIS
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "SZPITAL_DB"."WYPIS"  MINVALUE 1 MAXVALUE 9999 INCREMENT BY 1 START WITH 41 CACHE 20 NOORDER  NOCYCLE ;
+REM INSERTING into SZPITAL_DB.CHOROBA
+SET DEFINE OFF;
+Insert into SZPITAL_DB.CHOROBA (CHOROBAID,CHOROBANAZWA) values ('52','grypa');
+REM INSERTING into SZPITAL_DB.LEKARZ
+SET DEFINE OFF;
+Insert into SZPITAL_DB.LEKARZ (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK) values ('1','Tomasz','Niemczyk','ul. Paderewskiego','96012604398','726488368','doktor nauk','Chirurg','Mê¿czyzna','O-');
+Insert into SZPITAL_DB.LEKARZ (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK) values ('6','Anna','Milak','ul. Ma³a 3','8712336545','876123123','lekarz','Choroby zakaŸne','Kobieta','B+');
+Insert into SZPITAL_DB.LEKARZ (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK) values ('3','Magdalena','Ga³ka','ul. Reymonta 2','9643765423','876123321','doktor nauk medycznych','Kardiologia','Kobieta','A+');
+Insert into SZPITAL_DB.LEKARZ (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK) values ('4','Aleksandra','Nowak','ul. D³uga 1','7656452387','776123123','lekarz','Patologia','Kobieta','B-');
+Insert into SZPITAL_DB.LEKARZ (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK) values ('5','Jan','Mazur','ul. Nowa 32','8732123433','876123123','lekarz','Psycholog','Mê¿czyzna','O-');
+Insert into SZPITAL_DB.LEKARZ (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK) values ('2','Karolina','Zaj¹c','ul. Kopernika 2/1','9623436745','789123123','lekarz','Chirurg ','Kobieta','A+');
+REM INSERTING into SZPITAL_DB.LOGOWANIE
+SET DEFINE OFF;
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('0523253374','01879198','Emilia Nowik','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('9843434343','61050800','Piotr Martyniuk','pacjent','email','Wt 09.05.2017 o 16:58:21 ','Wt 09.05.2017 o 16:58:21 ');
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('6756423564','81932376','Donald Tust','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('8743625394','49622915','Sebastian Nowak','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('9854312367','95823848','Aleksandra Malczyñska','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('8743672348','73540092','Dariusz Wójcik','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('7654324543','22974373','Magdalena Mazur','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('6467654234','18769721','Anna Grodzka','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('8723562343','17624527','Maria Kowalska','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('admin','12345','Tomasz Niemczyk','admin','badrabbit96@gmail.com','Wt 09.05.2017 o 17:29:13 ','Wt 09.05.2017 o 17:29:13 ');
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('7743246382','25346788','Andrzej Duda','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('9843234624','03775412','Edward Gierek','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('8763243432','88868678','Robert Ryba','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('8632124357','43982912','Aniela Jaskierska','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('9823437623','30790959','Pawe³ Mickiewicz','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('8723326434','90565985','Jadwiga Brozik','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('12345','12345','Jan Kowalski','pacjent','email','Wt 09.05.2017 o 17:33:19 ','Wt 09.05.2017 o 17:33:19 ');
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('6543134243','98173639','Weronika Zaj¹c','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('0534234235','22333525','Emilia Kubik','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('9843768923','84555341','Anna Nowak','pacjent','email','Wt 09.05.2017 o 16:59:34 ','Wt 09.05.2017 o 16:59:34 ');
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('7632376473','60091617','Andrzej Lewandowski','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('05432343235','37810270','Emilia Nowik','pacjent','email',null,null);
+Insert into SZPITAL_DB.LOGOWANIE (LOGIN,HASLO,IMIE,STATUS,EMAIL,TERAZLOGOWANIE,OSTATNIELOGOWANIE) values ('7634234821','43229924','Andrzej Duda','pacjent','email',null,null);
+REM INSERTING into SZPITAL_DB.ODDZIAL
+SET DEFINE OFF;
+Insert into SZPITAL_DB.ODDZIAL (NAZWAODDZIALU,RODZAJODDZIALU,LICZBALOZEK) values ('Oddzia³ ratunkowy','Ratunkowy','20');
+Insert into SZPITAL_DB.ODDZIAL (NAZWAODDZIALU,RODZAJODDZIALU,LICZBALOZEK) values ('Pierwszy oddzia³ Chirurgi','Chirurgii ','10');
+Insert into SZPITAL_DB.ODDZIAL (NAZWAODDZIALU,RODZAJODDZIALU,LICZBALOZEK) values ('Oddzia³ psychiatryczny','Psychiatryczny','20');
+Insert into SZPITAL_DB.ODDZIAL (NAZWAODDZIALU,RODZAJODDZIALU,LICZBALOZEK) values ('Oddzia³ zakaŸny','Neurologiczny','20');
+Insert into SZPITAL_DB.ODDZIAL (NAZWAODDZIALU,RODZAJODDZIALU,LICZBALOZEK) values ('Oddzia³ wytrzeŸwieñ','Psychiatryczny','25');
+REM INSERTING into SZPITAL_DB.PACJENT
+SET DEFINE OFF;
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('12','Piotr','Martyniuk','ul. Muzyczna 43','9843434343','876234234','12','Mê¿czyzna','A-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('16','Sebastian','Nowak','ul. W¹ska 12','8743625394','678123123','32','Mê¿czyzna','B-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('13','Donald','Tust','ul. Wiejska 32','6756423564','567567123','54','Mê¿czyzna','A-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('4','Aleksandra','Malczyñska','ul. Mickiewicza 3/2','9854312367','873246324','18','Kobieta','A-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('7','Dariusz','Wójcik','ul. Haburda 32','8743672348','863234123','45','Mê¿czyzna','AB+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('10','Magdalena','Mazur','ul. Prosta 34a','7654324543','543123432','54','Kobieta','O-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('14','Anna','Grodzka','ul. Dziwna 32','6467654234','751543234','54','Mê¿czyzna','A-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('17','Maria','Kowalska','ul. Wa³owa 54','8723562343','876123123','32','Kobieta','A+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('2','Andrzej','Duda','ul. Warszawska 33','7743246382','874323789','33','Mê¿czyzna','O-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('6','Edward','Gierek','ul. Lewa 44','9843234624','873234232','88','Mê¿czyzna','B-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('9','Robert','Ryba','ul. Wsi³a 42/2','8763243432','673243244','34','Mê¿czyzna','O+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('18','Aniela','Jaskierska','ul. Szybka 3','8632124357','678123123','33','Kobieta','B+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('20','Pawe³','Mickiewicz','ul. Mickiewicza 3/2','9823437623','876523432','18','Mê¿czyzna','O-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('1','Jan','Kowalski','ul. Nowa 33','12345','635234780','44','Mê¿czyzna','O+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('19','Jadwiga','Brozik','ul. P³ywacka 9','8723326434','765123132','29','Kobieta','A+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('8','Weronika','Zaj¹c','ul. Zamkowa 32','6543134243','678123432','55','Kobieta','AB-','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('5','Andrzej','Lewandowski','ul. Sportowa 44','7632376473','767234123','28','Mê¿czyzna','B+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('3','Anna','Nowak','ul. Mi³a 32','9843768923','874233632','22','Kobieta','A+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('11','Emilia','Nowik','ul. S³oneczna 32','5432343235','654234234','15','Kobieta','A+','brak');
+Insert into SZPITAL_DB.PACJENT (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,ADRES,PESEL,NUMERTEL,WIEK,PLEC,GK,UWAGI) values ('15','Andrzej','Duda','ul. Prezydencka 32','7634234821','865123432','45','Mê¿czyzna','B+','brak');
+REM INSERTING into SZPITAL_DB.PACJENT_CHOROBA
+SET DEFINE OFF;
+Insert into SZPITAL_DB.PACJENT_CHOROBA (PACJENTID,CHOROBAID) values ('1','52');
+Insert into SZPITAL_DB.PACJENT_CHOROBA (PACJENTID,CHOROBAID) values ('3','52');
+REM INSERTING into SZPITAL_DB.PRZYJECIE_NA_ODDZIAL
+SET DEFINE OFF;
+Insert into SZPITAL_DB.PRZYJECIE_NA_ODDZIAL (PRZYJECIEID,PACJENTID,ROZPOZNANIE,NAZWAODDZIALU,DATAPRZ,LEKARZID,UWAGI) values ('1','1','omdlenie','Oddzia³ ratunkowy','09/05/2017','1','brak');
+Insert into SZPITAL_DB.PRZYJECIE_NA_ODDZIAL (PRZYJECIEID,PACJENTID,ROZPOZNANIE,NAZWAODDZIALU,DATAPRZ,LEKARZID,UWAGI) values ('4','5','bóle g³owy','Pierwszy oddzia³ Chirurgi','09/05/2017','3','brak');
+Insert into SZPITAL_DB.PRZYJECIE_NA_ODDZIAL (PRZYJECIEID,PACJENTID,ROZPOZNANIE,NAZWAODDZIALU,DATAPRZ,LEKARZID,UWAGI) values ('3','19','bóle g³owy','Oddzia³ ratunkowy','09/05/2017','6','brak');
+Insert into SZPITAL_DB.PRZYJECIE_NA_ODDZIAL (PRZYJECIEID,PACJENTID,ROZPOZNANIE,NAZWAODDZIALU,DATAPRZ,LEKARZID,UWAGI) values ('2','3','gor¹czka','Oddzia³ ratunkowy','09/05/2017','2','brak');
+REM INSERTING into SZPITAL_DB.WYPIS_Z_ODDZIALU
+SET DEFINE OFF;
+Insert into SZPITAL_DB.WYPIS_Z_ODDZIALU (WYPISID,PRZYJECIEID,DATAWYP,UWAGI) values ('22','3','09/05/2017','brak');
+--------------------------------------------------------
+--  DDL for Index PEZYJECIE_NA_ODDZIAL_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SZPITAL_DB"."PEZYJECIE_NA_ODDZIAL_PK" ON "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" ("PRZYJECIEID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index WYPIS_Z_ODDZIALU_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SZPITAL_DB"."WYPIS_Z_ODDZIALU_PK" ON "SZPITAL_DB"."WYPIS_Z_ODDZIALU" ("WYPISID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index PACJENT_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SZPITAL_DB"."PACJENT_PK" ON "SZPITAL_DB"."PACJENT" ("PACJENTID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index LEKARZ_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SZPITAL_DB"."LEKARZ_PK" ON "SZPITAL_DB"."LEKARZ" ("LEKARZID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index CHOROBA_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SZPITAL_DB"."CHOROBA_PK" ON "SZPITAL_DB"."CHOROBA" ("CHOROBAID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index ODDZIAL_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SZPITAL_DB"."ODDZIAL_PK" ON "SZPITAL_DB"."ODDZIAL" ("NAZWAODDZIALU") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Trigger CHOROBA
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SZPITAL_DB"."CHOROBA" 
+   before insert on "SZPITAL_DB"."CHOROBA" 
+   for each row 
+begin  
+   if inserting then 
+      if :NEW."CHOROBAID" is null then 
+         select CHOROBA_SEQ.nextval into :NEW."CHOROBAID" from dual; 
+      end if; 
+   end if; 
+end;
+
+/
+ALTER TRIGGER "SZPITAL_DB"."CHOROBA" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger LEKARZ
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SZPITAL_DB"."LEKARZ" 
+   before insert on "SZPITAL_DB"."LEKARZ" 
+   for each row 
+begin  
+   if inserting then 
+      if :NEW."LEKARZID" is null then 
+         select LEKARZ_SEQ.nextval into :NEW."LEKARZID" from dual; 
+      end if; 
+   end if; 
+end;
+/
+ALTER TRIGGER "SZPITAL_DB"."LEKARZ" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger PEZYJECIE_NA_ODDZIAL
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SZPITAL_DB"."PEZYJECIE_NA_ODDZIAL" 
+   before insert on "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" 
+   for each row 
+begin  
+   if inserting then 
+      if :NEW."PRZYJECIEID" is null then 
+         select PRZYJECIE_NA_ODDZIAL_SEQ.nextval into :NEW."PRZYJECIEID" from dual; 
+      end if; 
+   end if; 
+end;
+/
+ALTER TRIGGER "SZPITAL_DB"."PEZYJECIE_NA_ODDZIAL" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger WYPIS
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SZPITAL_DB"."WYPIS" 
+   before insert on "SZPITAL_DB"."WYPIS_Z_ODDZIALU" 
+   for each row 
+begin  
+   if inserting then 
+      if :NEW."WYPISID" is null then 
+         select WYPIS.nextval into :NEW."WYPISID" from dual; 
+      end if; 
+   end if; 
+end;
+
+/
+ALTER TRIGGER "SZPITAL_DB"."WYPIS" ENABLE;
+--------------------------------------------------------
+--  DDL for Procedure USUN_LEKARZ
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."USUN_LEKARZ" 
+(
+	   ID IN LEKARZ.LEKARZID%TYPE   
+)
+  IS
+begin 
+delete LEKARZ WHERE LEKARZID = ID;
+
+commit;
+end usun_lekarz;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure USUN_ODDZIAL
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."USUN_ODDZIAL" 
+(
+	   ID IN ODDZIAL.NAZWAODDZIALU%TYPE   
+)
+  IS
+begin 
+delete ODDZIAL WHERE NAZWAODDZIALU = ID;
+
+commit;
+end usun_oddzial;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure USUN_PACJENT
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."USUN_PACJENT" 
+(
+	   ID IN PACJENT.PACJENTID%TYPE   
+)
+  IS
+begin 
+delete PACJENT WHERE PACJENTID = ID;
+
+commit;
+end usun_pacjent;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure USUN_PRZYJECIE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."USUN_PRZYJECIE" 
+(
+	   ID IN PRZYJECIE_NA_ODDZIAL.PRZYJECIEID%TYPE   
+)
+  IS
+begin 
+delete PRZYJECIE_NA_ODDZIAL WHERE PRZYJECIEID = ID;
+
+commit;
+end usun_przyjecie;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure USUN_UZYTKOWNIK
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."USUN_UZYTKOWNIK" 
+(
+	   ID IN LOGOWANIE.LOGIN%TYPE   
+)
+  IS
+begin 
+delete LOGOWANIE WHERE LOGIN = ID;
+
+commit;
+end usun_uzytkownik;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure USUN_WYPIS
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."USUN_WYPIS" 
+(
+	   ID IN WYPIS_Z_ODDZIALU.WYPISID%TYPE   
+)
+  IS
+begin 
+delete WYPIS_Z_ODDZIALU WHERE WYPISID = ID;
+
+commit;
+end usun_wypis;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ZAPISZ_LEKARZ
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."ZAPISZ_LEKARZ" 
+(
+	   LEKARZID IN LEKARZ.LEKARZID%TYPE,
+     LEKARZIMIE IN LEKARZ.LEKARZIMIE%TYPE,
+	   LEKARZNAZWISKO IN LEKARZ.LEKARZNAZWISKO%TYPE,
+     ADRES IN LEKARZ.ADRES%TYPE,
+     PESEL IN LEKARZ.PESEL%TYPE,
+     NUMERTEL IN LEKARZ.NUMERTEL%TYPE,
+     KWALIFIKACJE IN LEKARZ.KWALIFIKACJE%TYPE,
+     SPECIALIZACJA IN LEKARZ.SPECIALIZACJA%TYPE,
+     PLEC IN LEKARZ.PLEC%TYPE,
+     GK IN LEKARZ.GK%TYPE
+   
+)
+  AS
+begin 
+insert into LEKARZ("LEKARZID","LEKARZIMIE","LEKARZNAZWISKO","ADRES","PESEL","NUMERTEL","KWALIFIKACJE","SPECIALIZACJA","PLEC","GK")
+values (LEKARZID,LEKARZIMIE,LEKARZNAZWISKO,ADRES,PESEL,NUMERTEL,KWALIFIKACJE,SPECIALIZACJA,PLEC,GK);
+
+commit;
+end zapisz_lekarz;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ZAPISZ_ODDZIAL
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."ZAPISZ_ODDZIAL" 
+(
+	   nazwaoddzialu IN ODDZIAL.NAZWAODDZIALU%TYPE,
+     rodzajoddzialu IN ODDZIAL.RODZAJODDZIALU%TYPE,
+	   liczbalozek IN ODDZIAL.LICZBALOZEK%TYPE
+)
+  AS
+begin 
+insert into ODDZIAL("NAZWAODDZIALU","RODZAJODDZIALU","LICZBALOZEK")
+values (nazwaoddzialu,rodzajoddzialu,liczbalozek);
+
+commit;
+end zapisz_oddzial;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ZAPISZ_PACJENT
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."ZAPISZ_PACJENT" 
+(
+	   PACJENTID IN PACJENT.PACJENTID%TYPE,
+     PACJENTIMIE IN PACJENT.PACJENTIMIE%TYPE,
+	   PACJENTNAZWISKO IN PACJENT.PACJENTNAZWISKO%TYPE,
+     NUMERTEL IN PACJENT.NUMERTEL%TYPE,
+     PESEL IN PACJENT.PESEL%TYPE,
+     WIEK IN PACJENT.WIEK%TYPE,
+     UWAGI IN PACJENT.UWAGI%TYPE,
+     PLEC IN PACJENT.PLEC%TYPE,
+     GK IN PACJENT.GK%TYPE,
+     ADRES IN PACJENT.ADRES%TYPE
+   
+)
+  AS
+begin 
+insert into PACJENT("PACJENTID","PACJENTIMIE","PACJENTNAZWISKO","NUMERTEL","PESEL","WIEK","UWAGI","PLEC","GK","ADRES")
+values (PACJENTID,PACJENTIMIE,PACJENTNAZWISKO,NUMERTEL,PESEL,WIEK,UWAGI,PLEC,GK,ADRES);
+
+commit;
+end zapisz_pacjent;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ZAPISZ_PRZYJECIE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."ZAPISZ_PRZYJECIE" 
+(
+	   PRZYJECIEID IN PRZYJECIE_NA_ODDZIAL.PRZYJECIEID%TYPE,
+     PACJENTID IN PRZYJECIE_NA_ODDZIAL.PACJENTID%TYPE,
+	   ROZPOZNANIE IN PRZYJECIE_NA_ODDZIAL.ROZPOZNANIE%TYPE,
+     NAZWAODDZIALU IN PRZYJECIE_NA_ODDZIAL.NAZWAODDZIALU%TYPE,
+     DATAPRZ IN PRZYJECIE_NA_ODDZIAL.DATAPRZ%TYPE,
+     LEKARZID IN PRZYJECIE_NA_ODDZIAL.LEKARZID%TYPE,
+     UWAGI IN PRZYJECIE_NA_ODDZIAL.UWAGI%TYPE
+)
+  AS
+begin 
+insert into PRZYJECIE_NA_ODDZIAL("PRZYJECIEID","PACJENTID","ROZPOZNANIE","NAZWAODDZIALU","DATAPRZ","LEKARZID","UWAGI")
+values (PRZYJECIEID,PACJENTID,ROZPOZNANIE,NAZWAODDZIALU,DATAPRZ,LEKARZID,UWAGI);
+
+commit;
+end zapisz_przyjecie;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ZAPISZ_UZYTKOWNIK
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE PROCEDURE "SZPITAL_DB"."ZAPISZ_UZYTKOWNIK" 
+(
+	   LOGIN IN LOGOWANIE.LOGIN%TYPE,
+     HASLO IN LOGOWANIE.HASLO%TYPE,
+	   IMIE IN LOGOWANIE.IMIE%TYPE,
+     STATUS IN LOGOWANIE.STATUS%TYPE,
+	   EMAIL IN LOGOWANIE.EMAIL%TYPE
+)
+  AS
+begin 
+insert into LOGOWANIE("LOGIN","HASLO","IMIE","STATUS","EMAIL")
+values (LOGIN,HASLO,IMIE,STATUS,EMAIL);
+
+commit;
+end zapisz_uzytkownik;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_DATA
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_DATA" 
+(PES IN NUMBER)
+RETURN VARCHAR2
+IS
+ILE VARCHAR2(30);
+ZMIENNA NUMBER;
+BEGIN
+SELECT PACJENTID INTO ZMIENNA FROM PACJENT WHERE PESEL=PES;
+
+SELECT DATAPRZ INTO ILE FROM PRZYJECIE_NA_ODDZIAL WHERE PACJENTID=ZMIENNA and rownum=1;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_DATA_WYPIS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_DATA_WYPIS" 
+(PES IN NUMBER)
+RETURN VARCHAR2
+IS
+ILE VARCHAR2(30);
+ILE2 VARCHAR2(30);
+ZMIENNA NUMBER;
+ZMIENNA1 NUMBER;
+ZMIENNA2 NUMBER;
+
+BEGIN
+ILE2 :='Jesteœ jeszcze na oddziale';
+SELECT PACJENTID INTO ZMIENNA FROM PACJENT WHERE PESEL=PES;
+SELECT PRZYJECIEID INTO ZMIENNA1 FROM PRZYJECIE_NA_ODDZIAL WHERE PACJENTID=ZMIENNA and rownum=1;
+
+SELECT COUNT(1) INTO ZMIENNA2 from WYPIS_Z_ODDZIALU WHERE PRZYJECIEID=ZMIENNA1;
+IF ZMIENNA2 = 0
+THEN
+
+RETURN ILE2;
+
+ELSE
+SELECT DATAWYP INTO ILE FROM WYPIS_Z_ODDZIALU WHERE PRZYJECIEID=ZMIENNA1 and rownum=1;
+RETURN ILE;
+END IF;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_DIAGNOZA
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_DIAGNOZA" 
+(PES IN NUMBER)
+RETURN VARCHAR2
+IS
+ILE VARCHAR2(30);
+ZMIENNA NUMBER;
+BEGIN
+SELECT PACJENTID INTO ZMIENNA FROM PACJENT WHERE PESEL=PES;
+
+SELECT ROZPOZNANIE INTO ILE FROM PRZYJECIE_NA_ODDZIAL WHERE PACJENTID=ZMIENNA and rownum=1;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_LEKARZ
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_LEKARZ" 
+(PES IN NUMBER)
+RETURN VARCHAR2
+IS
+ILE VARCHAR2(30);
+ILE2 VARCHAR2(30);
+ZMIENNA NUMBER;
+ZMIENNA2 NUMBER;
+BEGIN
+SELECT PACJENTID INTO ZMIENNA FROM PACJENT WHERE PESEL=PES;
+
+SELECT LEKARZID INTO ZMIENNA2 FROM PRZYJECIE_NA_ODDZIAL WHERE PACJENTID=ZMIENNA and rownum=1;
+
+SELECT LEKARZIMIE,LEKARZNAZWISKO INTO ILE,ILE2 FROM LEKARZ WHERE LEKARZID=ZMIENNA2;
+
+ ILE := ILE || rpad(' ',1,' ') || ILE2;
+RETURN ILE;
+
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_LICZBA_ODDZIAL
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_LICZBA_ODDZIAL" 
+(PES IN NUMBER)
+RETURN VARCHAR2
+IS
+ILE VARCHAR2(30);
+ZMIENNA2 VARCHAR2(30);
+ZMIENNA NUMBER;
+BEGIN
+SELECT PACJENTID INTO ZMIENNA FROM PACJENT WHERE PESEL=PES;
+
+SELECT NAZWAODDZIALU INTO ILE FROM PRZYJECIE_NA_ODDZIAL WHERE PACJENTID=ZMIENNA ;
+
+SELECT COUNT(NAZWAODDZIALU) INTO ZMIENNA2 FROM PRZYJECIE_NA_ODDZIAL WHERE NAZWAODDZIALU=ILE;
+
+RETURN ZMIENNA2;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_ODDZIAL
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_ODDZIAL" 
+(PES IN NUMBER)
+RETURN VARCHAR2
+IS
+ILE VARCHAR2(30);
+ZMIENNA NUMBER;
+BEGIN
+SELECT PACJENTID INTO ZMIENNA FROM PACJENT WHERE PESEL=PES;
+
+SELECT NAZWAODDZIALU INTO ILE FROM PRZYJECIE_NA_ODDZIAL WHERE PACJENTID=ZMIENNA and rownum=1;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_ODDZIAL_NAJWIECEJ
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_ODDZIAL_NAJWIECEJ" 
+RETURN VARCHAR2 
+IS
+
+WYNIK VARCHAR2(22);
+BEGIN
+
+select cnt1.NAZWAODDZIALU INTO WYNIK
+from (select COUNT(*) as total, NAZWAODDZIALU
+      from PRZYJECIE_NA_ODDZIAL
+      group by NAZWAODDZIALU) cnt1,
+     (select MAX(total) as maxtotal
+      from (select COUNT(*) as total, NAZWAODDZIALU from PRZYJECIE_NA_ODDZIAL group by NAZWAODDZIALU)) cnt2
+where cnt1.total = cnt2.maxtotal;
+
+RETURN WYNIK;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function PACJENT_USUN_PK_ERROR
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."PACJENT_USUN_PK_ERROR" 
+(PES IN NUMBER)
+RETURN NUMBER
+IS
+  ILE NUMBER;
+BEGIN
+  SELECT COUNT(PRZYJECIEID) INTO ILE 
+  FROM   PRZYJECIE_NA_ODDZIAL
+  WHERE  PACJENTID=(SELECT PACJENTID FROM PACJENT WHERE PESEL=PES) 
+     and rownum=1;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function POLICZ_LEKARZ
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."POLICZ_LEKARZ" 
+RETURN NUMBER 
+IS
+ile NUMBER;
+BEGIN
+SELECT COUNT(*) INTO ile FROM LEKARZ;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function POLICZ_PACJENCI
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."POLICZ_PACJENCI" 
+RETURN NUMBER 
+IS
+ile NUMBER;
+BEGIN
+SELECT COUNT(*) INTO ile FROM PACJENT;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function POLICZ_WSZYSCY
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."POLICZ_WSZYSCY" 
+RETURN NUMBER 
+IS
+ILE NUMBER;
+ILE2 NUMBER;
+WYNIK NUMBER;
+BEGIN
+SELECT COUNT(*) INTO ILE FROM PACJENT;
+SELECT COUNT(*) INTO ILE2 FROM LEKARZ;
+WYNIK := ILE+ILE2;
+RETURN WYNIK;
+end;
+
+/
+--------------------------------------------------------
+--  DDL for Function POLICZ_WYPIS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FUNCTION "SZPITAL_DB"."POLICZ_WYPIS" 
+RETURN NUMBER 
+IS
+ile NUMBER;
+BEGIN
+SELECT COUNT(*) INTO ile FROM WYPIS_Z_ODDZIALU;
+RETURN ILE;
+end;
+
+/
+--------------------------------------------------------
+--  Constraints for Table PRZYJECIE_NA_ODDZIAL
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("UWAGI" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("LEKARZID" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("DATAPRZ" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("NAZWAODDZIALU" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" ADD CONSTRAINT "PEZYJECIE_NA_ODDZIAL_PK" PRIMARY KEY ("PRZYJECIEID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("ROZPOZNANIE" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("PACJENTID" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" MODIFY ("PRZYJECIEID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table PACJENT
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."PACJENT" ADD CONSTRAINT "PACJENT_PK" PRIMARY KEY ("PACJENTID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("UWAGI" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("GK" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("PLEC" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("WIEK" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("NUMERTEL" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("PESEL" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("ADRES" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("PACJENTNAZWISKO" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT" MODIFY ("PACJENTIMIE" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table WYPIS_Z_ODDZIALU
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" MODIFY ("DATAWYP" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" MODIFY ("PRZYJECIEID" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" MODIFY ("WYPISID" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" MODIFY ("UWAGI" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" ADD CONSTRAINT "WYPIS_Z_ODDZIALU_PK" PRIMARY KEY ("WYPISID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table LEKARZ
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("GK" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" ADD CONSTRAINT "LEKARZ_PK" PRIMARY KEY ("LEKARZID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("PLEC" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("SPECIALIZACJA" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("KWALIFIKACJE" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("NUMERTEL" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("PESEL" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("ADRES" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("LEKARZNAZWISKO" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("LEKARZIMIE" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LEKARZ" MODIFY ("LEKARZID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table PACJENT_CHOROBA
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."PACJENT_CHOROBA" MODIFY ("CHOROBAID" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."PACJENT_CHOROBA" MODIFY ("PACJENTID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table ODDZIAL
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."ODDZIAL" MODIFY ("LICZBALOZEK" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."ODDZIAL" MODIFY ("RODZAJODDZIALU" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."ODDZIAL" ADD CONSTRAINT "ODDZIAL_PK" PRIMARY KEY ("NAZWAODDZIALU")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table LOGOWANIE
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."LOGOWANIE" ADD PRIMARY KEY ("LOGIN")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "SZPITAL_DB"."LOGOWANIE" MODIFY ("EMAIL" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LOGOWANIE" MODIFY ("STATUS" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LOGOWANIE" MODIFY ("IMIE" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LOGOWANIE" MODIFY ("HASLO" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."LOGOWANIE" MODIFY ("LOGIN" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table CHOROBA
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."CHOROBA" ADD CONSTRAINT "CHOROBA_PK" PRIMARY KEY ("CHOROBAID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "SZPITAL_DB"."CHOROBA" MODIFY ("CHOROBANAZWA" NOT NULL ENABLE);
+  ALTER TABLE "SZPITAL_DB"."CHOROBA" MODIFY ("CHOROBAID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Ref Constraints for Table PACJENT_CHOROBA
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."PACJENT_CHOROBA" ADD CONSTRAINT "PACJENT_CHOROBA_FK1" FOREIGN KEY ("CHOROBAID")
+	  REFERENCES "SZPITAL_DB"."CHOROBA" ("CHOROBAID") ENABLE;
+  ALTER TABLE "SZPITAL_DB"."PACJENT_CHOROBA" ADD CONSTRAINT "PACJENT_CHOROBA_FK2" FOREIGN KEY ("PACJENTID")
+	  REFERENCES "SZPITAL_DB"."PACJENT" ("PACJENTID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table PRZYJECIE_NA_ODDZIAL
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" ADD CONSTRAINT "PEZYJECIE_NA_ODDZIAL_FK1" FOREIGN KEY ("NAZWAODDZIALU")
+	  REFERENCES "SZPITAL_DB"."ODDZIAL" ("NAZWAODDZIALU") ENABLE;
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" ADD CONSTRAINT "PEZYJECIE_NA_ODDZIAL_FK2" FOREIGN KEY ("LEKARZID")
+	  REFERENCES "SZPITAL_DB"."LEKARZ" ("LEKARZID") ENABLE;
+  ALTER TABLE "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" ADD CONSTRAINT "PEZYJECIE_NA_ODDZIAL_FK3" FOREIGN KEY ("PACJENTID")
+	  REFERENCES "SZPITAL_DB"."PACJENT" ("PACJENTID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table WYPIS_Z_ODDZIALU
+--------------------------------------------------------
+
+  ALTER TABLE "SZPITAL_DB"."WYPIS_Z_ODDZIALU" ADD CONSTRAINT "WYPIS_Z_ODDZIALU_FK1" FOREIGN KEY ("PRZYJECIEID")
+	  REFERENCES "SZPITAL_DB"."PRZYJECIE_NA_ODDZIAL" ("PRZYJECIEID") ENABLE;
